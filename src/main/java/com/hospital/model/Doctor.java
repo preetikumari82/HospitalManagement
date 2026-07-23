@@ -1,0 +1,47 @@
+package com.hospital.model;
+
+import java.util.List;
+
+import com.hospital.enums.Specialization;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+public class Doctor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    // Doctor ka login/user data
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private int age;
+
+    private long salary;
+
+    private String phone;
+
+    // Doctor kis field ka specialist hai
+    @Enumerated(EnumType.STRING)
+    private Specialization specialization;
+
+    // Is doctor ke saare patients
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    private List<Patient> patients;
+}
