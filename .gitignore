@@ -1,0 +1,82 @@
+# ===============================
+# Maven
+# ===============================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Maven logs
+*.log
+
+# ===============================
+# IDE Files
+# ===============================
+
+# Eclipse / STS
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+
+# ===============================
+# Java
+# ===============================
+*.class
+*.jar
+*.war
+*.ear
+
+
+# ===============================
+# Spring Boot
+# ===============================
+
+# Application properties containing secrets
+application-local.properties
+
+# Environment variables
+.env
+*.env
+
+
+# ===============================
+# Database
+# ===============================
+
+# SQL dumps
+*.sql
+
+
+# ===============================
+# OS Files
+# ===============================
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Mac
+.DS_Store
+
+
+# ===============================
+# Logs
+# ===============================
+logs/
+*.log
+
+
+# ===============================
+# Temporary Files
+# ===============================
+*.tmp
+*.temp
+*.swp

@@ -1,0 +1,10 @@
+target/
+bin/
+.git/
+.gitignore
+.env
+.settings/
+.classpath
+.factorypath
+.project
+*.log
