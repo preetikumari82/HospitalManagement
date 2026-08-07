@@ -1,0 +1,97 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ToastProvider } from "./context/ToastContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Layout from "./components/Layout";
+import Login from "./pages/Login";
+import { roleHome } from "./utils/roleHome";
+
+import Doctors from "./pages/admin/Doctors";
+import MedicalStaff from "./pages/admin/MedicalStaff";
+import DoctorPatients from "./pages/doctor/Patients";
+import DoctorNurses from "./pages/doctor/Nurses";
+import NursePatients from "./pages/nurse/Patients";
+import MedicalPatients from "./pages/medical/Patients";
+
+function RootRedirect() {
+  const { user, token } = useAuth();
+  if (!token || !user) return <Navigate to="/login" replace />;
+  return <Navigate to={roleHome(user.role)} replace />;
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+
+      <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+        <Route
+          path="/admin/doctors"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <Doctors />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/medical"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <MedicalStaff />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/doctor/patients"
+          element={
+            <ProtectedRoute roles={["DOCTOR"]}>
+              <DoctorPatients />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/doctor/nurses"
+          element={
+            <ProtectedRoute roles={["DOCTOR"]}>
+              <DoctorNurses />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/nurse/patients"
+          element={
+            <ProtectedRoute roles={["NURSE"]}>
+              <NursePatients />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/medical/patients"
+          element={
+            <ProtectedRoute roles={["MEDICAL"]}>
+              <MedicalPatients />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
+
+      <Route path="/" element={<RootRedirect />} />
+      <Route path="*" element={<RootRedirect />} />
+    </Routes>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <ToastProvider>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </ToastProvider>
+    </BrowserRouter>
+  );
+}
