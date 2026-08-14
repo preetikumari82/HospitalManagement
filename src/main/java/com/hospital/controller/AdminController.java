@@ -24,6 +24,9 @@ import com.hospital.Dto.DoctorRegisterRequestDto;
 import com.hospital.Dto.DoctorResponse;
 import com.hospital.Dto.MedicalRegisterRequestDto;
 import com.hospital.Dto.MedicalResponse;
+import com.hospital.Dto.StaffAccountResponse;
+import com.hospital.Dto.StaffAccountRequest;
+import jakarta.validation.Valid;
 import com.hospital.imp.AdminServceImp;
 
 
@@ -47,7 +50,7 @@ public class AdminController {
 //	==++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// ragister
 	 
-	    @PostMapping("/ragisterdoctor")
+	    @PostMapping("/registerdoctor")
 	    public ResponseEntity<DoctorResponse> registerDoctor(
 	    		
 	            @RequestBody DoctorRegisterRequestDto request) {
@@ -119,6 +122,38 @@ public class AdminController {
 
 	        servive.deleteMedical(id);
 	        return ResponseEntity.ok("Medical staff deleted successfully.");
+	    }
+
+	    //=============================================================
+	    // FR1.3: generic staff account management (list / deactivate / activate)
+
+	    @GetMapping("/staff")
+	    public ResponseEntity<List<StaffAccountResponse>> getAllStaff() {
+
+	        return ResponseEntity.ok(servive.getAllStaffAccounts());
+	    }
+
+	    @PostMapping("/staff")
+    public ResponseEntity<StaffAccountResponse> createStaff(@Valid @RequestBody StaffAccountRequest request) {
+        return ResponseEntity.ok(servive.createStaffAccount(request));
+    }
+
+    @PutMapping("/staff/{userId}")
+    public ResponseEntity<StaffAccountResponse> updateStaff(@PathVariable Long userId,
+                                                             @Valid @RequestBody StaffAccountRequest request) {
+        return ResponseEntity.ok(servive.updateStaffAccount(userId, request));
+    }
+
+    @PatchMapping("/staff/{userId}/deactivate")
+	    public ResponseEntity<StaffAccountResponse> deactivateStaff(@PathVariable Long userId) {
+
+	        return ResponseEntity.ok(servive.deactivateStaffAccount(userId));
+	    }
+
+	    @PatchMapping("/staff/{userId}/activate")
+	    public ResponseEntity<StaffAccountResponse> activateStaff(@PathVariable Long userId) {
+
+	        return ResponseEntity.ok(servive.activateStaffAccount(userId));
 	    }
 
 }

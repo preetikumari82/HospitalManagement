@@ -12,6 +12,8 @@ import com.hospital.Dto.DoctorRegisterRequestDto;
 import com.hospital.Dto.DoctorResponse;
 import com.hospital.Dto.MedicalRegisterRequestDto;
 import com.hospital.Dto.MedicalResponse;
+import com.hospital.Dto.StaffAccountResponse;
+import com.hospital.Dto.StaffAccountRequest;
 import com.hospital.enums.Role;
 import com.hospital.model.Doctor;
 import com.hospital.model.Medical;
@@ -51,7 +53,7 @@ public class AdminServceImp implements AdminService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.DOCTOR);
-
+        user.setActive(true);   // ✅ Doctor automatically active
         // 3. Save User
         User savedUser = userRepository.save(user);
 
@@ -267,6 +269,62 @@ public class AdminServceImp implements AdminService {
 		medicalRepository.delete(medical);
 	}
 
+	// ===== FR1.3: generic staff account management (deactivate rather than delete) =====
+
+	@Override
+	public List<StaffAccountResponse> getAllStaffAccounts() {
+
+		List<StaffAccountResponse> responseList = new ArrayList<>();
+
+		for (User user : userRepository.findAll()) {
+
+			// Staff accounts only - patients self-manage via their own profile.
+			if (user.getRole() == Role.PATIENT) {
+				continue;
+			}
+
+			responseList.add(toStaffAccountResponse(user));
+		}
+
+		return responseList;
+	}
+
+	@Override
+	public StaffAccountResponse deactivateStaffAccount(Long userId) {
+		return setStaffActiveState(userId, false);
+	}
+
+	@Override
+	public StaffAccountResponse activateStaffAccount(Long userId) {
+		return setStaffActiveState(userId, true);
+	}
+
+	private StaffAccountResponse setStaffActiveState(Long userId, boolean active) {
+
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RuntimeException("Staff account not found"));
+
+		if (user.getRole() == Role.PATIENT) {
+			throw new RuntimeException("This endpoint manages staff accounts, not patient accounts");
+		}
+
+		user.setActive(active);
+		User saved = userRepository.save(user);
+
+		return toStaffAccountResponse(saved);
+	}
+
+	private StaffAccountResponse toStaffAccountResponse(User user) {
+
+		return StaffAccountResponse.builder()
+				.userId(user.getId())
+				.name(user.getName())
+				.email(user.getEmail())
+				.role(user.getRole().name())
+				.active(user.isActive())
+				.build();
+	}
+
 	private MedicalResponse toMedicalResponse(Medical medical) {
 
 		return MedicalResponse.builder()
@@ -278,5 +336,21 @@ public class AdminServceImp implements AdminService {
 				.department(medical.getDepartment())
 				.role(medical.getUser().getRole().name())
 				.build();
+	}
+
+
+
+	@Override
+	public StaffAccountResponse createStaffAccount(StaffAccountRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public StaffAccountResponse updateStaffAccount(Long userId, StaffAccountRequest request) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

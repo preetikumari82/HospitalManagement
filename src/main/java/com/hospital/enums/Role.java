@@ -6,5 +6,7 @@ public enum Role {
     PATIENT,
     RECEPTIONIST,
     NURSE,
-    MEDICAL
+    MEDICAL,
+    PHARMACIST,
+    LAB_TECH
 }

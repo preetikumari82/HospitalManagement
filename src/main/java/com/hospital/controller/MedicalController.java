@@ -3,6 +3,7 @@ package com.hospital.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.hospital.Dto.MedicineItemResponse;
@@ -14,6 +15,7 @@ import com.hospital.service.MedicalService;
 
 @RestController
 @RequestMapping("/api/medical")
+@PreAuthorize("hasAnyRole('ADMIN', 'MEDICAL', 'PHARMACIST')") // FR1.2
 public class MedicalController {
 
     private final MedicalService medicalService;

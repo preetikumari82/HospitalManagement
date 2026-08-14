@@ -3,6 +3,7 @@ package com.hospital.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.hospital.Dto.MedicineRequest;
@@ -17,6 +18,7 @@ import com.hospital.service.NurseService;
 
 @RestController
 @RequestMapping("/api/nurse")
+@PreAuthorize("hasRole('NURSE')") // FR1.2
 public class NurseController {
 
     private final NurseService nurseService;

@@ -48,6 +48,7 @@ public class AdminConfig {
 
                 user.setName(adminName);
                 user.setEmail(adminEmail);
+                user.setActive(false);
 
                 // Convert normal password into BCrypt password
                 user.setPassword(

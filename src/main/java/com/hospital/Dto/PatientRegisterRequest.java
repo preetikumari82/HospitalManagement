@@ -1,28 +1,16 @@
 package com.hospital.Dto;
-import com.hospital.enums.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter; import lombok.Setter;
 @Getter @Setter
-public class PatientRequest {
+public class PatientRegisterRequest {
     @NotBlank private String name;
     @NotBlank @Email private String email;
-    private String password;
+    @NotBlank @Size(min=6) private String password;
     @Min(1) @Max(120) private int age;
     @NotBlank private String gender;
     @NotBlank @Pattern(regexp="^[6-9]\\d{9}$") private String phone;
     @NotBlank private String address;
-    private long fees;
-    private String disease;
-    private Long doctorId;
-    private String treatment;
-    private String nurseRemarks;
-    private PatientStatus status;
-    private EncounterType encounterType;
-    private String bedNumber;
     private String emergencyContactName;
     private String emergencyContactPhone;
     private String emergencyContactRelationship;
-    private String allergies;
-    private String pastConditions;
-    private String prescriptions;
 }

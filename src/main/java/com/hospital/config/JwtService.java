@@ -3,6 +3,7 @@ package com.hospital.config;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -15,8 +16,8 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
     // Minimum 32-byte secret key (Base64 Encoded)
-    private static final String SECRET_KEY =
-            "VGhpc0lzQVNlY3JldEtleUZvckpXVFRlc3QxMjM0NTY3ODkwMTIzNDU2";
+	 @Value("${jwt.secret}")
+    private  String SECRET_KEY;
 
     // Secret Key
     private Key getSignKey() {

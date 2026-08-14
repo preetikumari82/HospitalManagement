@@ -10,12 +10,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
+
+    @Column(unique = true)
+    private String username;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -24,4 +24,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(nullable = true)
+    private boolean active = true;
 }
