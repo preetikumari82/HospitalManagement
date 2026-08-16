@@ -5,6 +5,11 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import { roleHome } from "./utils/roleHome";
+import PatientRegister from "./pages/PatientRegister";
+import ForgotPassword from "./pages/ForgotPassword";
+import Staff from "./pages/admin/Staff";
+import AdminPatients from "./pages/admin/Patients";
+import PatientProfile from "./pages/patient/Profile";
 
 import Doctors from "./pages/admin/Doctors";
 import MedicalStaff from "./pages/admin/MedicalStaff";
@@ -23,6 +28,8 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<PatientRegister />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route
@@ -33,6 +40,10 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route path="/admin/staff" element={<ProtectedRoute roles={["ADMIN"]}><Staff /></ProtectedRoute>} />
+        <Route path="/admin/patients" element={<ProtectedRoute roles={["ADMIN","RECEPTIONIST","DOCTOR","NURSE"]}><AdminPatients /></ProtectedRoute>} />
+        <Route path="/patient/profile" element={<ProtectedRoute roles={["PATIENT"]}><PatientProfile /></ProtectedRoute>} />
+
         <Route
           path="/admin/medical"
           element={

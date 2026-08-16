@@ -39,12 +39,23 @@ export default function Doctors() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const openCreate = () => {
-    setEditing(null);
-    setForm(emptyForm);
-    setFormError("");
-    setModalOpen(true);
-  };
+const openCreate = () => {
+  setEditing(null);
+
+  setForm({
+    name: "",
+    email: "",
+    password: "",
+    age: "",
+    salary: "",
+    phone: "",
+    specialization: SPECIALIZATIONS[0],
+  });
+
+  setFormError("");
+  setModalOpen(true);
+};
+
 
   const openEdit = (doc) => {
     setEditing(doc);
@@ -71,7 +82,7 @@ export default function Doctors() {
     setSaving(true);
     const payload = {
       name: form.name,
-      email: form.email,
+      email: form.email.toLowerCase(),
       password: form.password,
       age: Number(form.age) || 0,
       salary: Number(form.salary) || 0,

@@ -62,16 +62,16 @@ export default function Login() {
 
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="label">Email</label>
-              <input
-                type="email"
-                required
-                autoFocus
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@meridiancare.com"
-                className="input"
-              />
+              <label className="label">Email or Username</label>
+             <input
+  type="text"
+  required
+  autoFocus
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  placeholder="you@meridiancare.com"
+  className="input"
+/>
             </div>
             <div>
               <label className="label">Password</label>
@@ -101,9 +101,23 @@ export default function Login() {
             </button>
           </form>
 
+          <div className="flex justify-between mt-4 text-sm"><a
+  className="text-clover-700 font-semibold"
+  href="/register"
+>
+  Patient self-register
+</a>
+
+<a
+  className="text-clover-700 font-semibold"
+  href="/forgot-password"
+>
+  Forgot password?
+</a></div>
+
           <div className="mt-8 rounded-xl border border-line bg-white p-4 text-xs text-ink-500 leading-relaxed">
             <p className="font-semibold text-ink-700 mb-1">Roles on this system</p>
-            <p>Admin · Doctor · Nurse · Medical (pharmacy &amp; billing). Accounts are created by an Admin or Doctor — there is no public sign-up.</p>
+            <p>Admin · Doctor · Receptionist · Patient · Pharmacist · Lab Tech · Nurse. Patients can self-register; staff accounts are managed by Admin.</p>
           </div>
         </div>
       </div>

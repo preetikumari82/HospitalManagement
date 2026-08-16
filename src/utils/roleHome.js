@@ -8,6 +8,12 @@ export function roleHome(role) {
       return "/nurse/patients";
     case "MEDICAL":
       return "/medical/patients";
+    case "RECEPTIONIST":
+    case "PHARMACIST":
+    case "LAB_TECH":
+      return "/admin/patients";
+    case "PATIENT":
+      return "/patient/profile";
     default:
       return "/login";
   }

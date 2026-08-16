@@ -8,7 +8,12 @@ const NAV_BY_ROLE = {
   ADMIN: [
     { to: "/admin/doctors", label: "Doctors", icon: "🩺" },
     { to: "/admin/medical", label: "Medical Staff", icon: "💊" },
+    { to: "/admin/staff", label: "Staff Accounts", icon: "👥" },
+    { to: "/admin/patients", label: "Patients", icon: "🧑‍⚕️" },
   ],
+  RECEPTIONIST: [{ to: "/admin/patients", label: "Patients", icon: "🧑‍⚕️" }],
+  PHARMACIST: [{ to: "/admin/patients", label: "Patients", icon: "💊" }],
+  LAB_TECH: [{ to: "/admin/patients", label: "Patients", icon: "🧪" }],
   DOCTOR: [
     { to: "/doctor/patients", label: "Patients", icon: "🛏️" },
     { to: "/doctor/nurses", label: "Nurses", icon: "👩‍⚕️" },
@@ -22,6 +27,9 @@ const ROLE_TITLE = {
   DOCTOR: "Doctor",
   NURSE: "Nurse",
   MEDICAL: "Pharmacy / Billing",
+  RECEPTIONIST: "Reception",
+  PHARMACIST: "Pharmacist",
+  LAB_TECH: "Lab Technician",
 };
 
 export default function Layout() {
