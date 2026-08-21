@@ -1,81 +1,41 @@
-# Hospital Management — Backend (Spring Boot)
+# Hospital Management System Backend
 
-## Deploying on Render
+Spring Boot 3.5.x + Java 21 + MySQL + Spring Security/JWT.
 
-Java apps need **Docker** on Render (there's no native Java runtime there), and
-Render doesn't offer managed MySQL — so you'll point it at an external MySQL
-database. Full steps below.
+## Run locally
 
-### Files involved (already added to this project)
+1. Install Java 21 and MySQL 8.
+2. Create database:
+   `CREATE DATABASE hospital;`
+3. Copy `.env.example` to `.env` and update DB credentials.
+4. Start:
+   - Windows: `mvnw.cmd spring-boot:run`
+   - Linux/macOS: `bash mvnw spring-boot:run`
+5. API base: `http://localhost:8080/api`
+6. Swagger: `http://localhost:8080/swagger-ui/index.html`
 
-| File | Purpose |
-|---|---|
-| `Dockerfile` (project root, next to `pom.xml`) | Builds the jar with Maven, then runs it on a small JRE image. Render auto-detects this. |
-| `.dockerignore` (project root) | Keeps `.env`, `target/`, IDE files out of the image. |
-| `render.yaml` (project root, optional) | "Infra as code" — lets Render create the service from this repo automatically instead of clicking through the dashboard. |
-| `src/main/resources/application.properties` | Already updated to read `DB_URL`, `PORT`, and `CORS_ALLOWED_ORIGINS` from environment variables instead of being hardcoded to `localhost`. |
+The application uses `spring.jpa.hibernate.ddl-auto=update`, so tables are created/updated automatically for development.
 
-You don't need to create any new files yourself — just push this project
-(including the three new files above) to a GitHub repo.
+## Default development admin
 
-### 1. Get a MySQL database reachable from the internet
+If no environment variables are supplied:
+- Email: `admin@hospital.com`
+- Password: `admin123`
 
-Render itself doesn't host MySQL. Easiest free/cheap options: **Railway**,
-**Aiven for MySQL**, **Clever Cloud**, or **PlanetScale**. Create a database
-on any of these and note down: host, port, database name, username, password.
+Change these before production.
 
-### 2. Push this project to GitHub
+## Main modules
 
-```bash
-git init
-git add .
-git commit -m "Hospital backend"
-git branch -M main
-git remote add origin https://github.com/<you>/hospital-backend.git
-git push -u origin main
-```
+Authentication/JWT, patient registration/history, doctor profiles, departments, doctor schedules/leaves, appointments with slot-conflict protection, EHR/medical records/prescriptions, laboratory, billing + PDF invoice, pharmacy/medicine stock, IPD beds/admissions/discharge, role-based security, password reset OTP, appointment reminders, and admin/doctor dashboard summaries.
 
-### 3. Create the Web Service on Render
+## SRS alignment
 
-1. [dashboard.render.com](https://dashboard.render.com) → **New** → **Web Service**.
-2. Connect the GitHub repo you just pushed.
-3. Render should detect the `Dockerfile` and set **Runtime = Docker**
-   automatically (pick it manually if not). Leave Build/Start commands empty
-   — Docker handles both.
-4. Root directory: wherever `Dockerfile`/`pom.xml` sit (repo root if you
-   pushed only this project).
-5. Under **Environment**, add these variables:
+The backend implements the core modules described in SRS v1.0. The SRS specifies React + Spring Boot + MySQL/PostgreSQL, JWT/RBAC, patient management, doctor scheduling, appointments, EHR, billing, pharmacy, laboratory, IPD, analytics, and audit/security requirements.
 
-   | Key | Example value |
-   |---|---|
-   | `DB_URL` | `jdbc:mysql://<host>:<port>/hospital?useSSL=true&serverTimezone=UTC` |
-   | `DB_USERNAME` | your MySQL username |
-   | `DB_PASSWORD` | your MySQL password |
-   | `ADMIN_NAME` | `Hospital Admin` |
-   | `ADMIN_EMAIL` | `admin@hospital.com` |
-   | `ADMIN_PASSWORD` | a strong password — this becomes the seeded ADMIN login |
-   | `CORS_ALLOWED_ORIGINS` | your deployed frontend URL, e.g. `https://hospital-frontend.onrender.com` (comma-separate if more than one) |
+### Important production items
 
-   Do **not** set `PORT` — Render injects it automatically and
-   `application.properties` already reads it.
-6. Click **Create Web Service**. First build takes a few minutes (Maven
-   downloads dependencies, compiles, then a small JRE image is built and
-   started).
-7. Once live, your API base URL is `https://<your-service-name>.onrender.com`.
-   Test with: `https://<your-service-name>.onrender.com/api/auth/login`.
+Configure HTTPS, a production JWT secret, real SMTP credentials, restricted CORS, database backups, and an audit-log sink before deployment. Insurance integration, telemedicine, and AI diagnosis are explicitly out of scope for SRS v1.0.
 
-### 4. Point the frontend at it
+## API note
 
-In the frontend project, set `VITE_API_BASE_URL` to that Render URL (as a
-Render **Static Site** env var if you deploy the frontend on Render too, or
-in `.env` for local testing against the deployed backend).
-
-### Notes
-
-- Free-tier Render web services spin down after inactivity and take ~30–60s
-  to wake on the next request — the first login after idle time will be slow,
-  that's expected.
-- `spring.jpa.hibernate.ddl-auto=update` will create tables automatically on
-  first boot against your MySQL database — no manual schema needed.
-- The seeded ADMIN account (from `ADMIN_EMAIL`/`ADMIN_PASSWORD`) is your first
-  login; use it to register Doctors and Medical staff.
+Existing frontend compatibility is preserved under `/api/...`. The SRS lists `/api/v1` as its preferred versioned base; versioning can be introduced later with controller aliases without changing the current frontend contract.

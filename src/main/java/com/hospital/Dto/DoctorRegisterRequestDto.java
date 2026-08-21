@@ -19,4 +19,7 @@ public class DoctorRegisterRequestDto {
     
     private String phone;
     private Specialization specialization;
+    private String qualification;
+    private double consultationFee;
+    private Long departmentId;
 }

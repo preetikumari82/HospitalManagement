@@ -19,6 +19,7 @@ import com.hospital.model.Doctor;
 import com.hospital.model.Medical;
 import com.hospital.model.User;
 import com.hospital.repository.DocterRepository;
+import com.hospital.repository.DepartmentRepository;
 import com.hospital.repository.MedicalRepository;
 import com.hospital.repository.UserRepository;
 import com.hospital.service.AdminService;
@@ -28,6 +29,9 @@ public class AdminServceImp implements AdminService {
 
     @Autowired
     private DocterRepository doctorRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     @Autowired
     private MedicalRepository medicalRepository;
@@ -64,6 +68,11 @@ public class AdminServceImp implements AdminService {
         doctor.setPhone(request.getPhone());
         doctor.setSalary(request.getSalary());
         doctor.setSpecialization(request.getSpecialization());
+        doctor.setQualification(request.getQualification());
+        doctor.setConsultationFee(request.getConsultationFee());
+        if (request.getDepartmentId() != null) {
+            doctor.setDepartment(departmentRepository.findById(request.getDepartmentId()).orElseThrow(() -> new RuntimeException("Department not found")));
+        }
 
         // 5. Save Doctor
         Doctor savedDoctor = doctorRepository.save(doctor);
@@ -77,6 +86,10 @@ public class AdminServceImp implements AdminService {
                 .salary(savedDoctor.getSalary())
                 .phone(savedDoctor.getPhone())
                 .specialization(savedDoctor.getSpecialization())
+                .qualification(savedDoctor.getQualification())
+                .consultationFee(savedDoctor.getConsultationFee())
+                .departmentId(savedDoctor.getDepartment() == null ? null : savedDoctor.getDepartment().getId())
+                .departmentName(savedDoctor.getDepartment() == null ? null : savedDoctor.getDepartment().getName())
                 .build();
     }
 
@@ -98,6 +111,10 @@ public class AdminServceImp implements AdminService {
                     .salary(doctor.getSalary())
                     .phone(doctor.getPhone())
                     .specialization(doctor.getSpecialization())
+                    .qualification(doctor.getQualification())
+                    .consultationFee(doctor.getConsultationFee())
+                    .departmentId(doctor.getDepartment() == null ? null : doctor.getDepartment().getId())
+                    .departmentName(doctor.getDepartment() == null ? null : doctor.getDepartment().getName())
                     .build();
 
             responseList.add(response);
@@ -122,6 +139,10 @@ public class AdminServceImp implements AdminService {
                 .phone(doctor.getPhone())
                 .salary(doctor.getSalary())
                 .specialization(doctor.getSpecialization())
+                .qualification(doctor.getQualification())
+                .consultationFee(doctor.getConsultationFee())
+                .departmentId(doctor.getDepartment() == null ? null : doctor.getDepartment().getId())
+                .departmentName(doctor.getDepartment() == null ? null : doctor.getDepartment().getName())
                 .build();
     }
 
@@ -156,6 +177,9 @@ public class AdminServceImp implements AdminService {
 	            doctor.setPhone(request.getPhone());
 	            doctor.setSalary(request.getSalary());
 	            doctor.setSpecialization(request.getSpecialization());
+            doctor.setQualification(request.getQualification());
+            doctor.setConsultationFee(request.getConsultationFee());
+            if (request.getDepartmentId() != null) doctor.setDepartment(departmentRepository.findById(request.getDepartmentId()).orElseThrow(() -> new RuntimeException("Department not found")));
 
 	            Doctor updatedDoctor = doctorRepository.save(doctor);
 

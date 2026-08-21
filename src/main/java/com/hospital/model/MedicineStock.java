@@ -1,6 +1,7 @@
 package com.hospital.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import lombok.*;
 
 @Entity
@@ -24,4 +25,16 @@ public class MedicineStock {
 
     @Column(nullable = false)
     private Double rate;
+
+    @Column(length = 100)
+    private String category;
+
+    @Column(length = 100)
+    private String batchNumber;
+
+    private LocalDate expiryDate;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private Integer reorderLevel = 10;
 }

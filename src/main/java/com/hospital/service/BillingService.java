@@ -1,0 +1,1 @@
+package com.hospital.service; import java.util.*; import com.hospital.Dto.*; public interface BillingService{BillResponse create(BillRequest r); List<BillResponse> all(com.hospital.enums.PaymentStatus status,Long patientId); BillResponse get(Long id); BillResponse pay(Long id,PaymentRequest r); byte[] invoice(Long id);}

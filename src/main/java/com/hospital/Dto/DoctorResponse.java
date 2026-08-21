@@ -16,4 +16,8 @@ public class DoctorResponse {
     private long salary;
     private String phone;
     private Specialization specialization;
+    private String qualification;
+    private double consultationFee;
+    private Long departmentId;
+    private String departmentName;
 }

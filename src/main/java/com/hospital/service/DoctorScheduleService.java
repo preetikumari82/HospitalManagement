@@ -1,0 +1,1 @@
+package com.hospital.service; import java.util.*; import com.hospital.Dto.*; public interface DoctorScheduleService{ ScheduleResponse create(ScheduleRequest r); List<ScheduleResponse> getByDoctor(Long id); ScheduleResponse update(Long id,ScheduleRequest r); void delete(Long id); }

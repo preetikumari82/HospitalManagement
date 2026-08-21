@@ -1,0 +1,1 @@
+package com.hospital.service; import java.util.*; import com.hospital.Dto.*; public interface LabTestService{LabTestResponse create(LabTestRequest r); List<LabTestResponse> byPatient(Long id); List<LabTestResponse> all(); LabTestResponse result(Long id,LabTestResultRequest r); LabTestResponse status(Long id,com.hospital.enums.LabTestStatus s);}

@@ -17,7 +17,10 @@ public class JwtService {
 
     // Minimum 32-byte secret key (Base64 Encoded)
 	 @Value("${jwt.secret}")
-    private  String SECRET_KEY;
+    private String SECRET_KEY;
+
+    @Value("${jwt.expiration:900000}")
+    private long expiration;
 
     // Secret Key
     private Key getSignKey() {
@@ -31,7 +34,7 @@ public class JwtService {
         return Jwts.builder()
                 .subject(email)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 Hour
+                .expiration(new Date(System.currentTimeMillis() + expiration)) // 1 Hour
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

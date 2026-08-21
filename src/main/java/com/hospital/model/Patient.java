@@ -43,17 +43,7 @@ public class Patient {
     private String emergencyContactPhone;
     private String emergencyContactRelationship;
 
-    @Column(length=2000)
-    private String allergies;
-    @Column(length=4000)
-    private String pastConditions;
-    @Column(length=4000)
-    private String prescriptions;
-
-    @Column(length=4000)
-    private String treatment;
-    @Column(length=2000)
-    private String nurseRemarks;
+ 
 
     @Enumerated(EnumType.STRING)
     private Specialization specialization;
@@ -61,4 +51,24 @@ public class Patient {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="nurse_id")
     private Nurse nurse;
+    
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String allergies;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String pastConditions;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String prescriptions;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String treatment;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String nurseRemarks;
 }
