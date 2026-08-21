@@ -10,16 +10,29 @@ const NAV_BY_ROLE = {
     { to: "/admin/medical", label: "Medical Staff", icon: "💊" },
     { to: "/admin/staff", label: "Staff Accounts", icon: "👥" },
     { to: "/admin/patients", label: "Patients", icon: "🧑‍⚕️" },
+<<<<<<< HEAD
   ],
   RECEPTIONIST: [{ to: "/admin/patients", label: "Patients", icon: "🧑‍⚕️" }],
   PHARMACIST: [{ to: "/admin/patients", label: "Patients", icon: "💊" }],
+=======
+    { to: "/appointments", label: "Appointments", icon: "📅" },
+    { to: "/billing", label: "Billing", icon: "🧾" },
+  ],
+  RECEPTIONIST: [{ to: "/admin/patients", label: "Patients", icon: "🧑‍⚕️" }, { to: "/appointments", label: "Appointments", icon: "📅" }, { to: "/billing", label: "Billing", icon: "🧾" }],
+  PHARMACIST: [{ to: "/admin/patients", label: "Patients", icon: "💊" }, { to: "/appointments", label: "Appointments", icon: "📅" }],
+>>>>>>> 92921d9 (Added department and patientRagister)
   LAB_TECH: [{ to: "/admin/patients", label: "Patients", icon: "🧪" }],
   DOCTOR: [
     { to: "/doctor/patients", label: "Patients", icon: "🛏️" },
     { to: "/doctor/nurses", label: "Nurses", icon: "👩‍⚕️" },
+    { to: "/doctor/schedule", label: "Schedule", icon: "🗓️" },
+    { to: "/doctor/leave", label: "Leave", icon: "🌴" },
+    { to: "/appointments", label: "Appointments", icon: "📅" },
+    { to: "/ehr", label: "EHR", icon: "📋" },
   ],
   NURSE: [{ to: "/nurse/patients", label: "Patients", icon: "🛏️" }],
-  MEDICAL: [{ to: "/medical/patients", label: "Pharmacy & Billing", icon: "🧾" }],
+  PATIENT: [{ to: "/appointments", label: "Appointments", icon: "📅" }, { to: "/ehr", label: "EHR & Reports", icon: "📋" }, { to: "/billing", label: "Bills", icon: "🧾" }, { to: "/patient/profile", label: "Profile", icon: "👤" }],
+  MEDICAL: [{ to: "/medical/patients", label: "Pharmacy & Billing", icon: "🧾" }, { to: "/billing", label: "Billing", icon: "💳" }],
 };
 
 const ROLE_TITLE = {

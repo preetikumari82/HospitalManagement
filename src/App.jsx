@@ -17,6 +17,11 @@ import DoctorPatients from "./pages/doctor/Patients";
 import DoctorNurses from "./pages/doctor/Nurses";
 import NursePatients from "./pages/nurse/Patients";
 import MedicalPatients from "./pages/medical/Patients";
+import DoctorSchedule from "./pages/modules/DoctorSchedule";
+import DoctorLeave from "./pages/modules/DoctorLeave";
+import Appointments from "./pages/modules/Appointments";
+import EHR from "./pages/modules/EHR";
+import Billing from "./pages/modules/Billing";
 
 function RootRedirect() {
   const { user, token } = useAuth();
@@ -43,6 +48,14 @@ function AppRoutes() {
         <Route path="/admin/staff" element={<ProtectedRoute roles={["ADMIN"]}><Staff /></ProtectedRoute>} />
         <Route path="/admin/patients" element={<ProtectedRoute roles={["ADMIN","RECEPTIONIST","DOCTOR","NURSE"]}><AdminPatients /></ProtectedRoute>} />
         <Route path="/patient/profile" element={<ProtectedRoute roles={["PATIENT"]}><PatientProfile /></ProtectedRoute>} />
+<<<<<<< HEAD
+=======
+        <Route path="/appointments" element={<ProtectedRoute roles={["ADMIN","DOCTOR","PATIENT","RECEPTIONIST"]}><Appointments /></ProtectedRoute>} />
+        <Route path="/ehr" element={<ProtectedRoute roles={["ADMIN","DOCTOR","PATIENT"]}><EHR /></ProtectedRoute>} />
+        <Route path="/billing" element={<ProtectedRoute roles={["ADMIN","RECEPTIONIST","MEDICAL","PATIENT"]}><Billing /></ProtectedRoute>} />
+        <Route path="/doctor/schedule" element={<ProtectedRoute roles={["ADMIN","DOCTOR"]}><DoctorSchedule /></ProtectedRoute>} />
+        <Route path="/doctor/leave" element={<ProtectedRoute roles={["ADMIN","DOCTOR"]}><DoctorLeave /></ProtectedRoute>} />
+>>>>>>> 92921d9 (Added department and patientRagister)
 
         <Route
           path="/admin/medical"

@@ -8,7 +8,7 @@ import { useToast } from "../../context/ToastContext";
 
 const SPECIALIZATIONS = ["CARDIOLOGIST", "DENTIST", "NEUROLOGIST", "GENERAL_PHYSICIAN", "ORTHOPEDIC"];
 
-const emptyForm = { name: "", email: "", password: "", age: "", salary: "", phone: "", specialization: SPECIALIZATIONS[0] };
+const emptyForm = { name: "", email: "", password: "", age: "", salary: "", phone: "", specialization: SPECIALIZATIONS[0], qualification: "", consultationFee: "", departmentId: "" };
 
 export default function Doctors() {
   const toast = useToast();
@@ -50,6 +50,10 @@ const openCreate = () => {
     salary: "",
     phone: "",
     specialization: SPECIALIZATIONS[0],
+<<<<<<< HEAD
+=======
+    qualification: "", consultationFee: "", departmentId: "",
+>>>>>>> 92921d9 (Added department and patientRagister)
   });
 
   setFormError("");
@@ -67,6 +71,7 @@ const openCreate = () => {
       salary: doc.salary ?? "",
       phone: doc.phone || "",
       specialization: doc.specialization || SPECIALIZATIONS[0],
+      qualification: doc.qualification || "", consultationFee: doc.consultationFee ?? "", departmentId: doc.departmentId ?? "",
     });
     setFormError("");
     setModalOpen(true);
@@ -88,6 +93,7 @@ const openCreate = () => {
       salary: Number(form.salary) || 0,
       phone: form.phone,
       specialization: form.specialization,
+      qualification: form.qualification, consultationFee: Number(form.consultationFee)||0, departmentId: form.departmentId ? Number(form.departmentId) : null,
     };
     try {
       if (editing) {
@@ -165,6 +171,9 @@ const openCreate = () => {
           { key: "name", label: "Name" },
           { key: "email", label: "Email" },
           { key: "phone", label: "Phone" },
+          { key: "qualification", label: "Qualification" },
+          { key: "consultationFee", label: "Consultation", render: (r) => `₹${Number(r.consultationFee || 0).toLocaleString()}` },
+          { key: "departmentName", label: "Department" },
           { key: "age", label: "Age", width: "80px" },
           {
             key: "specialization",
@@ -246,6 +255,12 @@ const openCreate = () => {
           </FormRow>
 
           <ErrorText>{formError}</ErrorText>
+
+          <FormRow>
+            <div><label className="label">Qualification</label><input className="input" value={form.qualification} onChange={(e) => setForm({ ...form, qualification: e.target.value })} placeholder="MBBS, MD…" /></div>
+            <div><label className="label">Consultation fee</label><input className="input" type="number" min="0" value={form.consultationFee} onChange={(e) => setForm({ ...form, consultationFee: e.target.value })} /></div>
+          </FormRow>
+          <div><label className="label">Department ID (optional)</label><input className="input" type="number" value={form.departmentId} onChange={(e) => setForm({ ...form, departmentId: e.target.value })} placeholder="Create department first, then assign its ID" /></div>
 
           <div className="flex justify-end gap-2 pt-2">
             <button type="button" className="btn-outline" onClick={() => setModalOpen(false)}>
