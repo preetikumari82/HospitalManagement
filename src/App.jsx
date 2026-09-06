@@ -48,14 +48,13 @@ function AppRoutes() {
         <Route path="/admin/staff" element={<ProtectedRoute roles={["ADMIN"]}><Staff /></ProtectedRoute>} />
         <Route path="/admin/patients" element={<ProtectedRoute roles={["ADMIN","RECEPTIONIST","DOCTOR","NURSE"]}><AdminPatients /></ProtectedRoute>} />
         <Route path="/patient/profile" element={<ProtectedRoute roles={["PATIENT"]}><PatientProfile /></ProtectedRoute>} />
-<<<<<<< HEAD
-=======
+
         <Route path="/appointments" element={<ProtectedRoute roles={["ADMIN","DOCTOR","PATIENT","RECEPTIONIST"]}><Appointments /></ProtectedRoute>} />
         <Route path="/ehr" element={<ProtectedRoute roles={["ADMIN","DOCTOR","PATIENT"]}><EHR /></ProtectedRoute>} />
         <Route path="/billing" element={<ProtectedRoute roles={["ADMIN","RECEPTIONIST","MEDICAL","PATIENT"]}><Billing /></ProtectedRoute>} />
         <Route path="/doctor/schedule" element={<ProtectedRoute roles={["ADMIN","DOCTOR"]}><DoctorSchedule /></ProtectedRoute>} />
         <Route path="/doctor/leave" element={<ProtectedRoute roles={["ADMIN","DOCTOR"]}><DoctorLeave /></ProtectedRoute>} />
->>>>>>> 92921d9 (Added department and patientRagister)
+
 
         <Route
           path="/admin/medical"

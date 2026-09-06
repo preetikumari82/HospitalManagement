@@ -10,17 +10,12 @@ const NAV_BY_ROLE = {
     { to: "/admin/medical", label: "Medical Staff", icon: "💊" },
     { to: "/admin/staff", label: "Staff Accounts", icon: "👥" },
     { to: "/admin/patients", label: "Patients", icon: "🧑‍⚕️" },
-<<<<<<< HEAD
+
   ],
-  RECEPTIONIST: [{ to: "/admin/patients", label: "Patients", icon: "🧑‍⚕️" }],
-  PHARMACIST: [{ to: "/admin/patients", label: "Patients", icon: "💊" }],
-=======
-    { to: "/appointments", label: "Appointments", icon: "📅" },
-    { to: "/billing", label: "Billing", icon: "🧾" },
-  ],
+
   RECEPTIONIST: [{ to: "/admin/patients", label: "Patients", icon: "🧑‍⚕️" }, { to: "/appointments", label: "Appointments", icon: "📅" }, { to: "/billing", label: "Billing", icon: "🧾" }],
   PHARMACIST: [{ to: "/admin/patients", label: "Patients", icon: "💊" }, { to: "/appointments", label: "Appointments", icon: "📅" }],
->>>>>>> 92921d9 (Added department and patientRagister)
+
   LAB_TECH: [{ to: "/admin/patients", label: "Patients", icon: "🧪" }],
   DOCTOR: [
     { to: "/doctor/patients", label: "Patients", icon: "🛏️" },

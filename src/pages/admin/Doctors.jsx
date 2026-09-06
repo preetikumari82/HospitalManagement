@@ -50,10 +50,8 @@ const openCreate = () => {
     salary: "",
     phone: "",
     specialization: SPECIALIZATIONS[0],
-<<<<<<< HEAD
-=======
-    qualification: "", consultationFee: "", departmentId: "",
->>>>>>> 92921d9 (Added department and patientRagister)
+
+
   });
 
   setFormError("");
