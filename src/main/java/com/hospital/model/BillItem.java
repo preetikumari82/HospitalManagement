@@ -8,5 +8,5 @@ public class BillItem {
  @Enumerated(EnumType.STRING) @Column(name="item_type",nullable=false) private BillItemType itemType;
  @Column(nullable=false) private String description;
  @Column(nullable=false) private Double amount;
- @Column(nullable=false) private Integer quantity=1;
+ @Column(nullable=false) @Builder.Default private Integer quantity=1;
 }

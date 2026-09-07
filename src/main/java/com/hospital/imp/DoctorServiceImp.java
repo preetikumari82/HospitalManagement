@@ -146,67 +146,82 @@ String  name=request.getName().trim();
     }
     @Override
     public PatientResponse updatePatient(Long id, PatientRequest request) {
-
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id : " + id));
 
+        if (patient.getUser() != null) {
+            User user = patient.getUser();
+            if (request.getName() != null && !request.getName().isBlank()) {
+                user.setName(request.getName().trim());
+            }
+            if (request.getEmail() != null && !request.getEmail().isBlank()) {
+                user.setEmail(request.getEmail().trim().toLowerCase());
+            }
+            if (request.getPassword() != null && !request.getPassword().isBlank()) {
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
+            }
+            userRepository.save(user);
+        }
 
-        // Patient details update
-       patient.getUser().getName();
         patient.setAge(request.getAge());
-        patient.setGender(request.getGender());
-        patient.setPhone(request.getPhone());
-        patient.setAddress(request.getAddress());
         patient.setFees(request.getFees());
-        patient.setDisease(request.getDisease());
-
+        if (request.getGender() != null) patient.setGender(request.getGender());
+        if (request.getPhone() != null) patient.setPhone(request.getPhone());
+        if (request.getAddress() != null) patient.setAddress(request.getAddress());
+        if (request.getDisease() != null) patient.setDisease(request.getDisease());
+        if (request.getTreatment() != null) patient.setTreatment(request.getTreatment());
+        if (request.getNurseRemarks() != null) patient.setNurseRemarks(request.getNurseRemarks());
+        if (request.getBedNumber() != null) patient.setBedNumber(request.getBedNumber());
 
         Patient updatedPatient = patientRepository.save(patient);
 
-
         return PatientResponse.builder()
                 .id(updatedPatient.getId())
-                .name(updatedPatient.getUser().getName())
-                .email(updatedPatient.getUser().getEmail())
+                .name(updatedPatient.getUser() != null ? updatedPatient.getUser().getName() : "")
+                .email(updatedPatient.getUser() != null ? updatedPatient.getUser().getEmail() : "")
                 .age(updatedPatient.getAge())
                 .gender(updatedPatient.getGender())
                 .phone(updatedPatient.getPhone())
                 .address(updatedPatient.getAddress())
                 .fees(updatedPatient.getFees())
                 .disease(updatedPatient.getDisease())
-                .role(updatedPatient.getUser().getRole().name())
+                .treatment(updatedPatient.getTreatment())
+                .nurseRemarks(updatedPatient.getNurseRemarks())
+                .status(updatedPatient.getStatus())
+                .admissionDate(updatedPatient.getAdmissionDate())
+                .dischargeDate(updatedPatient.getDischargeDate())
+                .bedNumber(updatedPatient.getBedNumber())
+                .role(updatedPatient.getUser() != null ? updatedPatient.getUser().getRole().name() : Role.PATIENT.name())
                 .build();
     }
+
     @Override
     public PatientResponse dischargePatient(Long id) {
-
         Patient patient = patientRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Patient not found with id: " ));
+                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
 
-        // Update patient
-        patient.getStatus();
         patient.setDischargeDate(LocalDate.now());
         patient.setStatus(PatientStatus.DISCHARGED);
+        patient.setBedNumber(null);
 
         Patient dischargedPatient = patientRepository.save(patient);
-        
 
         return PatientResponse.builder()
                 .id(dischargedPatient.getId())
-                .name(dischargedPatient.getUser().getName())
-                .email(dischargedPatient.getUser().getEmail())
+                .name(dischargedPatient.getUser() != null ? dischargedPatient.getUser().getName() : "")
+                .email(dischargedPatient.getUser() != null ? dischargedPatient.getUser().getEmail() : "")
                 .age(dischargedPatient.getAge())
                 .gender(dischargedPatient.getGender())
                 .phone(dischargedPatient.getPhone())
                 .address(dischargedPatient.getAddress())
                 .fees(dischargedPatient.getFees())
                 .disease(dischargedPatient.getDisease())
+                .treatment(dischargedPatient.getTreatment())
+                .nurseRemarks(dischargedPatient.getNurseRemarks())
                 .status(dischargedPatient.getStatus())
                 .admissionDate(dischargedPatient.getAdmissionDate())
                 .dischargeDate(dischargedPatient.getDischargeDate())
-                
-                .role(dischargedPatient.getUser().getRole().name())
+                .role(dischargedPatient.getUser() != null ? dischargedPatient.getUser().getRole().name() : Role.PATIENT.name())
                 .build();
     }
     ///// create nurse by  doctor

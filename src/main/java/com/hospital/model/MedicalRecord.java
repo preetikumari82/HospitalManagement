@@ -13,6 +13,6 @@ public class MedicalRecord {
  @Column(length=2000) private String diagnosis;
  @Column(length=5000) private String notes;
  @Column(nullable=false) private LocalDateTime createdAt;
- @OneToMany(mappedBy="medicalRecord",cascade=CascadeType.ALL,orphanRemoval=true) private List<Prescription> prescriptions=new ArrayList<>();
+ @OneToMany(mappedBy="medicalRecord",cascade=CascadeType.ALL,orphanRemoval=true) @Builder.Default private List<Prescription> prescriptions=new ArrayList<>();
  @PrePersist void prePersist(){if(createdAt==null)createdAt=LocalDateTime.now();}
 }

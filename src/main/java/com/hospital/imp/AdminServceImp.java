@@ -158,53 +158,52 @@ public class AdminServceImp implements AdminService {
 
 	@Override
 	public DoctorResponse updateDoctor(Long id, DoctorRegisterRequestDto request) {
-
-	    List<Doctor> doctors = doctorRepository.findAll();
-
-	    for (Doctor doctor : doctors) {
-
-	        if (doctor.getId().equals(id)) {
-
-	            User user = doctor.getUser();
-
-	            user.setName(request.getName());
-	            user.setEmail(request.getEmail());
-	            user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-	            userRepository.save(user);
-
-	            doctor.setAge(request.getAge());
-	            doctor.setPhone(request.getPhone());
-	            doctor.setSalary(request.getSalary());
-	            doctor.setSpecialization(request.getSpecialization());
-            doctor.setQualification(request.getQualification());
-            doctor.setConsultationFee(request.getConsultationFee());
-            if (request.getDepartmentId() != null) doctor.setDepartment(departmentRepository.findById(request.getDepartmentId()).orElseThrow(() -> new RuntimeException("Department not found")));
-
-	            Doctor updatedDoctor = doctorRepository.save(doctor);
-
-	            return DoctorResponse.builder()
-	                    .doctorId(updatedDoctor.getId())
-	                    .name(updatedDoctor.getUser().getName())
-	                    .email(updatedDoctor.getUser().getEmail())
-	                    .age(updatedDoctor.getAge())
-	                    .phone(updatedDoctor.getPhone())
-	                    .salary(updatedDoctor.getSalary())
-	                    .specialization(updatedDoctor.getSpecialization())
-	                    .build();
-	        }
-	    }
-
-	    throw new RuntimeException("Doctor not found");
-	}
-	
-	public void deleteDoctor(Long id) {
-
 		Doctor doctor = doctorRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Doctor not found"));
 
-		// Doctor.user is mapped with cascade = ALL, so removing the doctor
-		// also removes the linked login (User) record.
+		User user = doctor.getUser();
+		if (request.getName() != null && !request.getName().isBlank()) {
+			user.setName(request.getName());
+		}
+		if (request.getEmail() != null && !request.getEmail().isBlank()) {
+			user.setEmail(request.getEmail());
+		}
+		if (request.getPassword() != null && !request.getPassword().isBlank()) {
+			user.setPassword(passwordEncoder.encode(request.getPassword()));
+		}
+		userRepository.save(user);
+
+		doctor.setAge(request.getAge());
+		doctor.setPhone(request.getPhone());
+		doctor.setSalary(request.getSalary());
+		doctor.setSpecialization(request.getSpecialization());
+		doctor.setQualification(request.getQualification());
+		doctor.setConsultationFee(request.getConsultationFee());
+		if (request.getDepartmentId() != null) {
+			doctor.setDepartment(departmentRepository.findById(request.getDepartmentId())
+					.orElseThrow(() -> new RuntimeException("Department not found")));
+		}
+
+		Doctor updatedDoctor = doctorRepository.save(doctor);
+
+		return DoctorResponse.builder()
+				.doctorId(updatedDoctor.getId())
+				.name(updatedDoctor.getUser().getName())
+				.email(updatedDoctor.getUser().getEmail())
+				.age(updatedDoctor.getAge())
+				.phone(updatedDoctor.getPhone())
+				.salary(updatedDoctor.getSalary())
+				.specialization(updatedDoctor.getSpecialization())
+				.qualification(updatedDoctor.getQualification())
+				.consultationFee(updatedDoctor.getConsultationFee())
+				.departmentId(updatedDoctor.getDepartment() == null ? null : updatedDoctor.getDepartment().getId())
+				.departmentName(updatedDoctor.getDepartment() == null ? null : updatedDoctor.getDepartment().getName())
+				.build();
+	}
+	
+	public void deleteDoctor(Long id) {
+		Doctor doctor = doctorRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Doctor not found"));
 		doctorRepository.delete(doctor);
 	}
 
@@ -366,15 +365,45 @@ public class AdminServceImp implements AdminService {
 
 	@Override
 	public StaffAccountResponse createStaffAccount(StaffAccountRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		if (userRepository.existsByEmail(request.getEmail())) {
+			throw new RuntimeException("Email already exists.");
+		}
+
+		User user = new User();
+		user.setName(request.getName());
+		user.setEmail(request.getEmail());
+		user.setUsername(request.getEmail());
+		user.setPassword(passwordEncoder.encode(request.getPassword()));
+		user.setRole(request.getRole());
+		user.setActive(true);
+
+		User savedUser = userRepository.save(user);
+		return toStaffAccountResponse(savedUser);
 	}
-
-
 
 	@Override
 	public StaffAccountResponse updateStaffAccount(Long userId, StaffAccountRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RuntimeException("Staff account not found"));
+
+		if (user.getRole() == Role.PATIENT) {
+			throw new RuntimeException("Cannot update patient accounts from staff management");
+		}
+
+		if (request.getName() != null && !request.getName().isBlank()) {
+			user.setName(request.getName());
+		}
+		if (request.getEmail() != null && !request.getEmail().isBlank()) {
+			user.setEmail(request.getEmail());
+		}
+		if (request.getRole() != null) {
+			user.setRole(request.getRole());
+		}
+		if (request.getPassword() != null && !request.getPassword().isBlank()) {
+			user.setPassword(passwordEncoder.encode(request.getPassword()));
+		}
+
+		User updatedUser = userRepository.save(user);
+		return toStaffAccountResponse(updatedUser);
 	}
 }

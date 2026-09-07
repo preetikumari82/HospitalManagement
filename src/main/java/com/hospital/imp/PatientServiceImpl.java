@@ -71,40 +71,80 @@ public class PatientServiceImpl implements PatientService {
     }
 
     public PatientResponse discharge(Long id, PatientRequest r) {
-        Patient p=patientRepository.findById(id).orElseThrow(()->new RuntimeException("Patient not found"));
-        p.setStatus(PatientStatus.DISCHARGED); p.setDischargeDate(LocalDate.now());
+        Patient p = patientRepository.findById(id).orElseThrow(() -> new RuntimeException("Patient not found"));
+        p.setStatus(PatientStatus.DISCHARGED);
+        p.setDischargeDate(LocalDate.now());
+        p.setBedNumber(null);
+        if (r != null) {
+            if (r.getNurseRemarks() != null) p.setNurseRemarks(r.getNurseRemarks());
+            if (r.getTreatment() != null) p.setTreatment(r.getTreatment());
+        }
         return toResponse(patientRepository.save(p));
     }
 
-    private void apply(Patient p, PatientRequest r) {
-        if (r.getDoctorId()!=null) p.setDoctor(doctorRepository.findById(r.getDoctorId()).orElseThrow(()->new RuntimeException("Doctor not found")));
-        applyCommon(p,r);
-        if (r.getStatus()!=null) p.setStatus(r.getStatus());
-        if (r.getEncounterType()!=null) p.setEncounterType(r.getEncounterType());
-    }
-    private void applyCommon(Patient p, PatientRequest r) {
-        User u=p.getUser(); u.setName(r.getName()); u.setEmail(r.getEmail());
-        if (r.getPassword()!=null && !r.getPassword().isBlank()) u.setPassword(passwordEncoder.encode(r.getPassword()));
-        userRepository.save(u);
-        p.setAge(r.getAge()); p.setGender(r.getGender()); p.setPhone(r.getPhone()); p.setAddress(r.getAddress());
-        p.setFees(r.getFees()); p.setDisease(r.getDisease()); p.setTreatment(r.getTreatment()); p.setNurseRemarks(r.getNurseRemarks());
-        p.setBedNumber(r.getBedNumber()); p.setEmergencyContactName(r.getEmergencyContactName());
-        p.setEmergencyContactPhone(r.getEmergencyContactPhone()); p.setEmergencyContactRelationship(r.getEmergencyContactRelationship());
-        p.setAllergies(r.getAllergies()); p.setPastConditions(r.getPastConditions()); p.setPrescriptions(r.getPrescriptions());
-    }
-    private PatientResponse toResponse(Patient p) {
-        User u=p.getUser();
-        return PatientResponse.builder().id(p.getId()).name(u.getName()).email(u.getEmail()).age(p.getAge()).gender(p.getGender())
-          .phone(p.getPhone()).address(p.getAddress()).fees(p.getFees()).disease(p.getDisease()).status(p.getStatus())
-          .encounterType(p.getEncounterType()).admissionDate(p.getAdmissionDate()).dischargeDate(p.getDischargeDate()).bedNumber(p.getBedNumber())
-          .emergencyContactName(p.getEmergencyContactName()).emergencyContactPhone(p.getEmergencyContactPhone())
-          .emergencyContactRelationship(p.getEmergencyContactRelationship()).allergies(p.getAllergies()).pastConditions(p.getPastConditions())
-          .prescriptions(p.getPrescriptions()).role(u.getRole().name()).treatment(p.getTreatment()).nurseRemarks(p.getNurseRemarks()).build();
+    @Override
+    public PatientResponse discharge(Long id) {
+        return discharge(id, null);
     }
 
-	@Override
-	public PatientResponse discharge(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    private void apply(Patient p, PatientRequest r) {
+        if (r.getDoctorId() != null) {
+            p.setDoctor(doctorRepository.findById(r.getDoctorId()).orElseThrow(() -> new RuntimeException("Doctor not found")));
+        }
+        applyCommon(p, r);
+        if (r.getStatus() != null) p.setStatus(r.getStatus());
+        if (r.getEncounterType() != null) p.setEncounterType(r.getEncounterType());
+    }
+
+    private void applyCommon(Patient p, PatientRequest r) {
+        User u = p.getUser();
+        if (r.getName() != null && !r.getName().isBlank()) u.setName(r.getName());
+        if (r.getEmail() != null && !r.getEmail().isBlank()) u.setEmail(r.getEmail());
+        if (r.getPassword() != null && !r.getPassword().isBlank()) u.setPassword(passwordEncoder.encode(r.getPassword()));
+        userRepository.save(u);
+        p.setAge(r.getAge());
+        p.setGender(r.getGender());
+        p.setPhone(r.getPhone());
+        p.setAddress(r.getAddress());
+        p.setFees(r.getFees());
+        p.setDisease(r.getDisease());
+        p.setTreatment(r.getTreatment());
+        p.setNurseRemarks(r.getNurseRemarks());
+        p.setBedNumber(r.getBedNumber());
+        p.setEmergencyContactName(r.getEmergencyContactName());
+        p.setEmergencyContactPhone(r.getEmergencyContactPhone());
+        p.setEmergencyContactRelationship(r.getEmergencyContactRelationship());
+        p.setAllergies(r.getAllergies());
+        p.setPastConditions(r.getPastConditions());
+        p.setPrescriptions(r.getPrescriptions());
+    }
+
+    private PatientResponse toResponse(Patient p) {
+        User u = p.getUser();
+        return PatientResponse.builder()
+                .id(p.getId())
+                .name(u.getName())
+                .email(u.getEmail())
+                .age(p.getAge())
+                .gender(p.getGender())
+                .phone(p.getPhone())
+                .address(p.getAddress())
+                .fees(p.getFees())
+                .disease(p.getDisease())
+                .status(p.getStatus())
+                .encounterType(p.getEncounterType())
+                .admissionDate(p.getAdmissionDate())
+                .dischargeDate(p.getDischargeDate())
+                .bedNumber(p.getBedNumber())
+                .emergencyContactName(p.getEmergencyContactName())
+                .emergencyContactPhone(p.getEmergencyContactPhone())
+                .emergencyContactRelationship(p.getEmergencyContactRelationship())
+                .allergies(p.getAllergies())
+                .pastConditions(p.getPastConditions())
+                .prescriptions(p.getPrescriptions())
+                .role(u.getRole().name())
+                .treatment(p.getTreatment())
+                .nurseRemarks(p.getNurseRemarks())
+                .build();
+    }
 }

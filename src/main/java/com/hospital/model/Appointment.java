@@ -11,9 +11,9 @@ public class Appointment {
  @ManyToOne(fetch=FetchType.LAZY, optional=false) @JoinColumn(name="doctor_id") private Doctor doctor;
  @Column(nullable=false) private LocalDate appointmentDate;
  @Column(name="time_slot",nullable=false) private LocalTime timeSlot;
- @Enumerated(EnumType.STRING) @Column(nullable=false) private AppointmentStatus status=AppointmentStatus.PENDING;
+ @Enumerated(EnumType.STRING) @Column(nullable=false) @Builder.Default private AppointmentStatus status=AppointmentStatus.PENDING;
  @Column(length=1000) private String reason;
- @Column(nullable=false) private boolean reminderSent=false;
+ @Column(nullable=false) @Builder.Default private boolean reminderSent=false;
  @Column(nullable=false) private LocalDateTime createdAt;
  @PrePersist void prePersist(){ if(createdAt==null) createdAt=LocalDateTime.now(); }
 }

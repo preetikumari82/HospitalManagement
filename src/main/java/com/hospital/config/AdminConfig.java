@@ -48,7 +48,8 @@ public class AdminConfig {
 
                 user.setName(adminName);
                 user.setEmail(adminEmail);
-                user.setActive(false);
+                user.setUsername(adminEmail);
+                user.setActive(true);
 
                 // Convert normal password into BCrypt password
                 user.setPassword(
@@ -57,30 +58,26 @@ public class AdminConfig {
 
                 user.setRole(Role.ADMIN);
 
-
                 // Save User first
                 User savedUser = userRepository.save(user);
 
-
-
                 Admin admin = new Admin();
-
                 admin.setUser(savedUser);
                 admin.setCreatedAt(LocalDateTime.now());
 
-
                 adminRepository.save(admin);
-
-
-                System.out.println("Admin saved successfully");
-
-
+                System.out.println("Admin saved successfully and activated");
             } else {
-
-                System.out.println("Admin already exists");
-
+                // Ensure existing admin account is active
+                userRepository.findByEmail(adminEmail).ifPresent(existingUser -> {
+                    if (!existingUser.isActive()) {
+                        existingUser.setActive(true);
+                        userRepository.save(existingUser);
+                        System.out.println("Existing Admin account activated");
+                    }
+                });
+                System.out.println("Admin already exists and is active");
             }
-
         };
     }
 }

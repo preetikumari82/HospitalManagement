@@ -21,6 +21,8 @@ public interface AdminService {
 
 	DoctorResponse updateDoctor(Long id, DoctorRegisterRequestDto request);
 
+	void deleteDoctor(Long id);
+
 	// Medical (pharmacy/billing) staff management
 	MedicalResponse registerMedical(MedicalRegisterRequestDto request);
 

@@ -48,32 +48,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Extract Token
         String token = authHeader.substring(7);
 
-        // Extract Email
-        String email = jwtService.extractUsername(token);
+        try {
+            // Extract Email
+            String email = jwtService.extractUsername(token);
 
-        // Authenticate User
-        if (email != null &&
-                SecurityContextHolder.getContext().getAuthentication() == null) {
+            // Authenticate User
+            if (email != null &&
+                    SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails =
-                    userDetailsService.loadUserByUsername(email);
+                UserDetails userDetails =
+                        userDetailsService.loadUserByUsername(email);
 
-            if (jwtService.isTokenValid(token, userDetails.getUsername())) {
+                if (jwtService.isTokenValid(token, userDetails.getUsername())) {
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities());
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities());
 
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource()
-                                .buildDetails(request));
+                    authentication.setDetails(
+                            new WebAuthenticationDetailsSource()
+                                    .buildDetails(request));
 
-                SecurityContextHolder
-                        .getContext()
-                        .setAuthentication(authentication);
+                    SecurityContextHolder
+                            .getContext()
+                            .setAuthentication(authentication);
+                }
             }
+        } catch (Exception e) {
+            // Expired or invalid token: clear context and proceed to entry point
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
