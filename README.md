@@ -1,4 +1,4 @@
-# Meridian Care — Hospital Management Frontend
+## Meridian Care — Hospital Management Frontend
  ###dq
 A React (Vite) frontend for the Spring Boot Hospital Management System backend,
 with a role-based dashboard for **Admin**, **Doctor**, **Nurse** and **Medical**
